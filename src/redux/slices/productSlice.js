@@ -4,14 +4,15 @@ import axios from "axios";
 // action return promise
  export const fetchProducts = createAsyncThunk("product/fetchProducts" , async () =>{
     const  result = await axios.get("https://dummyjson.com/products")
-    console.log(result);
+    // 
+    sessionStorage .setItem("allProducts",JSON.stringify(result.data.products))
     return result.data.products
     
  })
 
 
  const productSlice =createSlice({
-    name:"product",
+    name:"products",
     initialState:{
         allProducts:[],
         loading:false,
@@ -33,12 +34,12 @@ import axios from "axios";
             state.errorMsg=""
         })
 
-        builder.addCase(fetchProducts.fulfilled,(state,apiResult)=>{
+        builder.addCase(fetchProducts.rejected,(state,apiResult)=>{
             state.allProducts =[]
             state.loading= false
             state.errorMsg="API call failed"
         })
     }
  })
- export default productSlice
+ export default productSlice.reducer
  
